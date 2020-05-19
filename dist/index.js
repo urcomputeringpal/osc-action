@@ -1382,11 +1382,12 @@ module.exports = require("os");
 /***/ 104:
 /***/ (function(__unusedmodule, __unusedexports, __webpack_require__) {
 
-const core = __webpack_require__(470);
-const OSC = __webpack_require__(234);
+const core = __webpack_require__(470)
+const dgram = __webpack_require__(200)
+const OSC = __webpack_require__(234)
 
 async function run() {
-  let osc
+
   try {
     const endpoint = core.getInput('endpoint', { required: true })
     const host = core.getInput('host', { required: true })
@@ -1394,32 +1395,30 @@ async function run() {
     const separator = core.getInput('separator')
     const message = core.getInput('message', { required: true })
 
-    osc = new OSC({ plugin: new OSC.DatagramPlugin({ send: { host: host, port: port } }) })
-    osc.open()  
-
     let msg = [message]
     if (separator != '') {
       msg = message.split(separator)
     }
 
-    let oscMsg = new OSC.Message(endpoint)
-    for (const part of msg) {  
-      oscMsg.add(part)
-    }
+    const oscMessage = new OSC.Message(endpoint, ...msg)
+    const binary = oscMessage.pack()
 
-    osc.send(oscMsg)
+    const socket = dgram.createSocket('udp4')
+    socket.on('error', (err) => {
+      console.log(`socket error:\n${err.stack}`)
+      socket.close()
+    })
 
-    console.log("sent", oscMsg)
+    socket.send(Buffer.from(binary), 0, binary.byteLength, port, host, (err) => {
+      if (err) {
+        core.setFailed(err.message)
+      }
+      socket.close();
+    })
+
   } catch (error) {
     core.setFailed(error.message)
-  } finally {
-    try {
-      osc.close()
-    } catch (error) {
-      core.setFailed(error.message)
-    }
   }
-
 }
 
 run()

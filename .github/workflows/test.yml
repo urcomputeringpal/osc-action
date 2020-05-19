@@ -23,7 +23,7 @@ jobs:
     - uses: ./
       with:
         host: localhost
-        port: 1234
-        separator: "|"
+        port: 51235
         endpoint: /run-code
-        message: GUID|play 60
+        separator: "|"
+        message: ACTIONS|play 60
