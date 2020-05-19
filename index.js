@@ -1,22 +1,41 @@
 const core = require('@actions/core');
-const wait = require('./wait');
+const OSC = require('osc-js');
 
-
-// most @actions toolkit packages have async methods
 async function run() {
-  try { 
-    const ms = core.getInput('milliseconds');
-    console.log(`Waiting ${ms} milliseconds ...`)
+  let osc
+  try {
+    const endpoint = core.getInput('endpoint', { required: true })
+    const host = core.getInput('host', { required: true })
+    const port = core.getInput('port', { required: true })
+    const separator = core.getInput('separator')
+    const message = core.getInput('message', { required: true })
 
-    core.debug((new Date()).toTimeString())
-    await wait(parseInt(ms));
-    core.debug((new Date()).toTimeString())
+    osc = new OSC({ plugin: new OSC.DatagramPlugin({ send: { host: host, port: port } }) })
+    osc.open()  
 
-    core.setOutput('time', new Date().toTimeString());
-  } 
-  catch (error) {
-    core.setFailed(error.message);
+    let msg = [message]
+    if (separator != '') {
+      msg = message.split(separator)
+    }
+
+    let oscMsg = new OSC.Message(endpoint)
+    for (const part of msg) {  
+      oscMsg.add(part)
+    }
+
+    osc.send(oscMsg)
+
+    console.log("sent", oscMsg)
+  } catch (error) {
+    core.setFailed(error.message)
+  } finally {
+    try {
+      osc.close()
+    } catch (error) {
+      core.setFailed(error.message)
+    }
   }
+
 }
 
 run()

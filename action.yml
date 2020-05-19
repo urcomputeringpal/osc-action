@@ -1,13 +1,22 @@
-name: 'Wait'
-description: 'Wait a designated number of milliseconds'
+name: Jesse Newland'
+description: Send Open Sound Control messages in GitHub Actions workflows.
+author: Urcomputeringpal
 inputs:
-  milliseconds:  # id of input
-    description: 'number of milliseconds to wait'
+  host:              
+    description: host
     required: true
-    default: '1000'
-outputs:
-  time: # output will be available to future steps 
-    description: 'The message to output'
+  port:              
+    description: port
+    required: true
+  separator:              
+    description: if present, message is split by this value
+    required: false
+  message:              
+    description: the message to send
+    required: true
+  endpoint:              
+    description: endpoint
+    required: true
 runs:
   using: 'node12'
   main: 'dist/index.js'
