@@ -11,3 +11,5 @@ Send Open Sound Control messages as a part of GitHub Actions workflows. Because 
         separator: "|"
         message: ACTIONS|play 60
 ```
+
+Pairs nicely with [Sonic Pi](https://sonic-pi.net) and [GitHub Actions Self-hosted runners](https://help.github.com/en/actions/hosting-your-own-runners).
