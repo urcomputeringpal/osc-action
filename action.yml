@@ -1,6 +1,6 @@
-name: Jesse Newland'
-description: Send Open Sound Control messages in GitHub Actions workflows.
-author: Urcomputeringpal
+name: Jesse Newland
+description: Send Open Sound Control messages in GitHub Actions workflows
+author: urcomputeringpal
 inputs:
   host:              
     description: host
