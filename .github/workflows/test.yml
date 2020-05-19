@@ -22,4 +22,8 @@ jobs:
     - uses: actions/checkout@v1
     - uses: ./
       with:
-        milliseconds: 1000
+        host: localhost
+        port: 1234
+        separator: "|"
+        endpoint: /run-code
+        message: GUID|play 60
