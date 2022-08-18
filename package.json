@@ -25,7 +25,7 @@
   },
   "homepage": "https://github.com/urcomputeringpal/osc-action#readme",
   "dependencies": {
-    "@actions/core": "^1.1.1",
+    "@actions/core": "^1.9.1",
     "osc-js": "^2.1.0"
   },
   "devDependencies": {
